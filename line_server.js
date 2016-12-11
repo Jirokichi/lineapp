@@ -3,6 +3,16 @@ var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
 var async = require('async');
+var config = require('config')
+if(!config){
+    console.log("Please create config folder and default.json under it.")
+    return
+}else{
+    console.log("-----------------------------")
+    console.log("Config file:")
+    console.log(config)
+    console.log("-----------------------------")
+}
 
 app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.urlencoded({extended: true}));  // JSONの送信を許可
@@ -42,7 +52,7 @@ app.post('/callback', function(req, res){
         //ヘッダーを定義
         var headers = {
             'Content-Type' : 'application/json; charset=UTF-8',
-            'Authorization' : 'Bearer vrbxy/xBS4Xg6v9XmqTka9PH2ttnKXEzV6VMiHLKWYfjK38VEpsWCUX2+qzZqmr/C0W7mcTIg/awt9IVYGRXK2P1g8ozEh3E4YsZINGuVqBc0SF8LQgG42ER0QKvr2QfZRH0V03FQ4s44p8NXs+7VAdB04t89/1O/w1cDnyilFU='
+            'Authorization' : 'Bearer ' + config.LINE.Authorization
             //'X-Line-ChannelSecret' : '0aa746dc7a1fca60f694c7d4eda99933'
         };
         // 送信データ作成
