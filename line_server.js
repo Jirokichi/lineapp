@@ -1,9 +1,13 @@
+// ログの定義
+var logger = require('lUtil/PLogger.js')
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
 var async = require('async');
 var config = require('config')
+logger.info("Start Line Server")
 if(!config){
     console.log("Please create config folder and default.json under it.")
     return
