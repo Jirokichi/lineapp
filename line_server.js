@@ -14,7 +14,8 @@ if(!config){
     console.log("-----------------------------")
 }
 
-app.set('port', (process.env.PORT || 5000));
+var localPortNum = config.General.port
+app.set('port', (process.env.PORT || localPortNum));
 app.use(bodyParser.urlencoded({extended: true}));  // JSONの送信を許可
 app.use(bodyParser.json());                        // JSONのパースを楽に（受信時）
 app.get('/', function(request, response) {
