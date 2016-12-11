@@ -26,6 +26,10 @@ app.get('/', function(request, response) {
     logger.info("get /")
     response.send('PetaBoard Server');
 });
+app.post('/', function(request, response) {
+    logger.info("post / - this path is not supported. please change the registerd url in line app.")
+    response.send('PetaBoard Server');
+});
 
 app.post('/callback', function(req, res){
     logger.info("callback")
