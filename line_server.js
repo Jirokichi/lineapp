@@ -23,11 +23,12 @@ app.set('port', (process.env.PORT || localPortNum));
 app.use(bodyParser.urlencoded({extended: true}));  // JSONの送信を許可
 app.use(bodyParser.json());                        // JSONのパースを楽に（受信時）
 app.get('/', function(request, response) {
+    logger.info("get /")
     response.send('PetaBoard Server');
 });
 
 app.post('/callback', function(req, res){
-    console.log("callback")
+    logger.info("callback")
     // console.log(req)
     console.log(req.body)
     console.log("-----------")
