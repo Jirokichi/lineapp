@@ -4,7 +4,13 @@
   "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
   "main": "server.js",
   "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "author": "Peta Inc.",
+  "engines": {
+    "node": ">=4.3.2"
+  },
+  "scripts": {
+    "start": "node line_server.js"
+  },
   "dependencies": {
     "async": "~0.2.8",
     "body-parser": "^1.15.2",
@@ -15,4 +21,5 @@
     "request": "^2.79.0",
     "socket.io": "~0.9.14"
   }
+  
 }
