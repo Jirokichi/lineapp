@@ -28,12 +28,25 @@ router.post('/', function(req, res) {
 });
 
 router.post('/callback', function(req, res){
-    logger.info("callback")
+    logger.info("ラインからPostがあったためコールバックの処理を開始します")
     async.waterfall([
         // LINE Messageのパース
         function(callGetUserId) {
             logger.info("LINEからのデータをパースします")
             var json = req.body;
+
+            if(!json.events){
+                logger.error("eventキーがないため終了します")
+                callGetUserId("No Event Key")
+                return
+            }else if(json.events.length == 0){
+                logger.error("eventがないため終了します")
+                callGetUserId("No Event Key")
+                return
+            }else if(json.events.length >= 2){
+                logger.error("eventが２個以上あります。一つ目のみパースします。")
+            }
+
 
             // 受信データのパース
             // メッセージ
@@ -45,6 +58,7 @@ router.post('/callback', function(req, res){
             //ユーザー情報
             var userId = json.events[0].source.userId
             if(userId){
+                logger.info("メッセージの取得に成功しました")
                 var jsonData = {
                     "type" : type,
                     "timestamp" : timestamp,
@@ -55,7 +69,7 @@ router.post('/callback', function(req, res){
                 // ユーザーからのデータだけ保存する
                 callGetUserId(null, jsonData);
             }else{
-                logger.debug("ユーザーからのメッセージではないので終了します)")
+                logger.error("ユーザーからのメッセージではないので終了します)")
                 callGetUserId("No User's message");
             }
         },
@@ -75,20 +89,20 @@ router.post('/callback', function(req, res){
             };
 
             request.get(options, function (err, response, body) {
-                logger.info("1")
                 if (!err && response.statusCode == 200) {
-                    logger.info("2")
-                    jsonData.userName = response.displayeName
-                    jsonData.userPicture = response.pictureUrl
+                    logger.info("ユーザー情報の取得に成功しました")
+                    logger.info(body)
+                    jsonData.userName = body.displayName
+                    jsonData.userPicture = body.pictureUrl
                     saveDataToDB(null, jsonData)
                 } else {
-                    logger.info("3")
+                    logger.error("ユーザー情報取得中にエラーが発生しました")
                     if(err){
-                        logger.info("4")
+                        logger.error("err発生:" + err)
                         saveDataToDB(err, jsonData)
                         return
                     }
-                    logger.info("5")
+                    logger.error("response.statusCode is not equal as 200:" + err)
                     saveDataToDB(response.statusCode, jsonData)
                 }
             })
@@ -96,18 +110,22 @@ router.post('/callback', function(req, res){
     ],
     // LINE BOT
     function(err, jsonData) {
-        logger.info(err)
+        logger.info("データの加工処理終了")
         logger.info(jsonData)
         if(err){
             logger.debug(err)
             res.send('Error Happens! - ' + err);
             return
         }
-        logger.info("データの加工処理終了")
-        logger.info(jsonData)
-        logger.info("データそDBに保存開始します")
+        logger.info("DBに保存開始します...")
         myGCloud.insert(jsonData, function(err, id){
-            logger.info("Succss to save the data to DB! - " + id)
+            if(err){
+                logger.error("DBへの保存中にエラーが発生しました - " + err)
+                res.send(err);
+                return 
+            }
+
+            logger.info("DBへの保存が成功しました - " + id)
             res.send('Success to save the data to DB!');
         })
     });

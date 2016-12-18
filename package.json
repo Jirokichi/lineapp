@@ -1,6 +1,6 @@
 {
   "name": "line-message-manager",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "description": "登録したラインのアカウントに投稿されたメッセージをGoogle Data Storeに保存するサーバー。",
   "main": "line_server.js",
   "repository": "",
