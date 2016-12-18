@@ -62,6 +62,7 @@ router.post('/callback', function(req, res){
         // ユーザーIDからデータを取得
         function(jsonData, saveDataToDB){
             logger.info("ユーザー情報を取得します")
+            logger.info(jsonData)
             //ヘッダーを定義
             var headers = {
                 'Authorization' : 'Bearer ' + config.LINE.Authorization
@@ -69,26 +70,34 @@ router.post('/callback', function(req, res){
 
             var options = {
                 url: 'https://api.line.me/v2/bot/profile/' + jsonData.userId,
+                headers: headers,
                 json: true
             };
 
             request.get(options, function (err, response, body) {
+                logger.info("1")
                 if (!err && response.statusCode == 200) {
+                    logger.info("2")
                     jsonData.userName = response.displayeName
                     jsonData.userPicture = response.pictureUrl
                     saveDataToDB(null, jsonData)
                 } else {
+                    logger.info("3")
                     if(err){
-                        saveDataToDB(err)
+                        logger.info("4")
+                        saveDataToDB(err, jsonData)
                         return
                     }
-                    saveDataToDB(response.statusCode)
+                    logger.info("5")
+                    saveDataToDB(response.statusCode, jsonData)
                 }
             })
         }
     ],
     // LINE BOT
     function(err, jsonData) {
+        logger.info(err)
+        logger.info(jsonData)
         if(err){
             logger.debug(err)
             res.send('Error Happens! - ' + err);

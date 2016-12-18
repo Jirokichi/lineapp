@@ -4,7 +4,7 @@ const ProjectId = 'petaboard-152202';
 // The kind for the new entity
 const Kind = 'Messages';
 
-const isComputeEngine = false
+const isComputeEngine = true
 
 
 var datastore
