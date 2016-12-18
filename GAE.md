@@ -49,7 +49,12 @@ $ gcloud app deploy
 
 ##基礎知識
 
-AWSのEC2 = Google Compute Engine
+* AWSのEC2 = Google Compute Engine
+* GAS+LINE Messaging API+Google Drive APIで簡単サーバー構築。
+	* [Line BotをGoogle App Scriptで](http://qiita.com/osamu1203/items/0de2909821a1b3cbb350)
+	* あ
+
+
 
 ##Google App Engineとは
 
